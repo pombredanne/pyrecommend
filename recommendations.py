@@ -45,9 +45,11 @@ def similarity_pearson(data_a, data_b):
         return math.sqrt(fact(a_vals) * fact(b_vals))
 
     shared_items = data_a.viewkeys() & data_b.viewkeys()
+    if not shared_items:
+        return 0
+
     a_scores = list(values(data_a, shared_items))
     b_scores = list(values(data_b, shared_items))
-
     denominator = pearson_denominator(a_scores, b_scores)
     if denominator == 0:
         return 0
