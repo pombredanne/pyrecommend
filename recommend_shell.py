@@ -13,5 +13,4 @@ from recommendations import *
 
 from critics import critics
 movies = invert_data(critics)
-movielens = movielens.load_movielens_data(
-    os.path.expanduser('~/Downloads/movielens'))
+movielens = movielens.load_movielens_data('ml-100k')
