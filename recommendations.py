@@ -73,13 +73,13 @@ def similar_sets(dataset, target, similarity=similarity_pearson):
     return sorted(scores, reverse=True)
 
 
-def similarity_data(dataset):
+def similarity_data(dataset, similarity=similarity_distance):
     """Get a map of items to similar items using a ranking dataset."""
     result = {}
     item_rankings = invert_data(dataset)
     for item in item_rankings:
         similar_items = similar_sets(item_rankings, item,
-                                     similarity=similarity_distance)
+                                     similarity=similarity)
         result[item] = similar_items
     return result
 
