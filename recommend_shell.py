@@ -6,7 +6,6 @@ Use::
 
 """
 # pylint: disable=invalid-name
-import copy
 from pprint import pprint  # pylint: disable=unused-import
 
 import movielens
@@ -40,9 +39,20 @@ users_src = {
 }
 
 
+APPLY_FACTOR = 5
+
+
+users_applies = {
+    'a': (1,),
+    'b': (3,),
+}
+
+
 users = {
     k: {ad_id: 1 for ad_id in v} for k, v in users_src.items()
 }
+for user, apply_ids in users_applies.items():
+    users[user].update({k: APPLY_FACTOR for k in apply_ids})
 
 
 sim_ads = rec.similarity_data(users, rec.similarity_cosine)
