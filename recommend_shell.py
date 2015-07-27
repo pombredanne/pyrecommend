@@ -30,12 +30,24 @@ users_src = {
     'a': (1, 2, 3),
     'b': (1, 3, 5),
     'c': (10, 11, 12),
+    'd': (1,),
+    'e': (11, 12, 13),
+    'f': (1, 20),
+    'g': (30, 31),
+    'h': (1, 3, 6),
+    'i': (1, 3, 30),
+    'j': (2,),
 }
+
 
 users = {
     k: {ad_id: 1 for ad_id in v} for k, v in users_src.items()
 }
 
-users_zero = copy.deepcopy(users)
-pad_zero(users_zero.values())
-sim_ads = rec.similarity_data(users_zero, rec.similarity_pearson)
+
+sim_ads = rec.similarity_data(users, rec.similarity_cosine)
+
+
+def suggest(user_id):
+    """Get suggested ad IDs for the given user."""
+    return rec.recommend_items(sim_ads, users[user_id])

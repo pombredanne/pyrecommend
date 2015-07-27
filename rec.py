@@ -6,8 +6,7 @@ import math
 
 def similarity_distance(data_a, data_b):
     """Get similarity between two datasets by Euclidean distance."""
-
-    # Find all items they both have
+# Find all items they both have
     shared_items = data_a.viewkeys() & data_b.viewkeys()
 
     # Find Euclidean distance
@@ -55,6 +54,27 @@ def similarity_pearson(data_a, data_b):
         return 0
     numerator = pearson_numerator(a_scores, b_scores)
     return numerator / denominator
+
+
+def similarity_cosine(data_a, data_b):
+    """Similarity between data_a and data_b using cosine."""
+
+    common_keys = data_a.viewkeys() | data_b.viewkeys()
+
+    def dot_product():  # pylint: disable=missing-docstring
+        result = 0
+        for k in common_keys:
+            result += data_a.get(k, 0) * data_b.get(k, 0)
+        return result
+
+    def mag(data):
+        """Get the magnitude of the values of a dictionary."""
+        return math.sqrt(sum(v**2 for v in data.values()))
+
+    if data_a and data_b:
+        return dot_product() / (mag(data_a) * mag(data_b))
+    else:
+        return 0
 
 
 def similar_sets(dataset, target, similarity=similarity_pearson):
@@ -145,16 +165,10 @@ def recommend_items(similar_data, target):
             # target has rated this item so don't recommend it
             if target.get(other_item, 0) != 0:
                 continue
-            if similarity <= 0:
-                continue
             scores[other_item] += similarity * rating
-            similarity_totals[other_item] += similarity
-    rankings = ((score / similarity_totals[item], item)
-                for item, score in scores.items())
+            # similarity_totals[other_item] += similarity
+    # rankings = ((score / similarity_totals[item], item)
+    #             for item, score in scores.items())
+    rankings = ((score, item) for item, score in scores.items())
 
-    def is_positive_score(item):
-        """Check if item's score is greater than zero."""
-        score, _ = item
-        return score > 0
-
-    return sorted((r for r in rankings if is_positive_score(r)), reverse=True)
+    return sorted(rankings, reverse=True)
