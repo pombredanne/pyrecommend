@@ -143,10 +143,18 @@ def recommend_items(similar_data, target):
         for similarity, other_item in similar_data[item]:
 
             # target has rated this item so don't recommend it
-            if other_item in target:
+            if target.get(other_item, 0) != 0:
+                continue
+            if similarity <= 0:
                 continue
             scores[other_item] += similarity * rating
             similarity_totals[other_item] += similarity
     rankings = ((score / similarity_totals[item], item)
                 for item, score in scores.items())
-    return sorted(rankings, reverse=True)
+
+    def is_positive_score(item):
+        """Check if item's score is greater than zero."""
+        score, _ = item
+        return score > 0
+
+    return sorted((r for r in rankings if is_positive_score(r)), reverse=True)

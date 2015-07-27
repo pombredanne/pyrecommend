@@ -7,11 +7,13 @@ Use::
 """
 # pylint: disable=invalid-name
 import copy
-import movielens
-import recommendations
+from pprint import pprint  # pylint: disable=unused-import
 
+import movielens
+import rec
 from critics import critics
-movies = recommendations.invert_data(critics)
+
+movies = rec.invert_data(critics)
 movielens = movielens.load_movielens_data('ml-100k')
 
 
@@ -36,3 +38,4 @@ users = {
 
 users_zero = copy.deepcopy(users)
 pad_zero(users_zero.values())
+sim_ads = rec.similarity_data(users_zero, rec.similarity_pearson)
