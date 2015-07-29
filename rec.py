@@ -6,7 +6,7 @@ import math
 
 def similarity_distance(data_a, data_b):
     """Get similarity between two datasets by Euclidean distance."""
-# Find all items they both have
+    # Find all items they both have
     shared_items = data_a.viewkeys() & data_b.viewkeys()
 
     # Find Euclidean distance
