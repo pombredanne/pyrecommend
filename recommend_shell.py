@@ -8,12 +8,7 @@ Use::
 # pylint: disable=invalid-name
 from pprint import pprint  # pylint: disable=unused-import
 
-import movielens
 import rec
-from critics import critics
-
-movies = rec.invert_data(critics)
-movielens = movielens.load_movielens_data('ml-100k')
 
 
 def pad_zero(dicts):
@@ -60,4 +55,4 @@ sim_ads = rec.similarity_data(users, rec.similarity_cosine)
 
 def suggest(user_id):
     """Get suggested ad IDs for the given user."""
-    return rec.recommend_items(sim_ads, users[user_id])
+    return rec.recommend(sim_ads, users[user_id])
