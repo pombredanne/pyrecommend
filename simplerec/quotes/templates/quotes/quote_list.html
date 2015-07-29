@@ -15,7 +15,7 @@
         {% else %}
             <ul>
                 {% for quote in quote_list %}
-                    <li>{{ quote }}</li>
+                    <li><a href="{{ quote.get_absolute_url }}">{{ quote }}</a></li>
                 {% endfor %}
             </ul>
         {% endif %}

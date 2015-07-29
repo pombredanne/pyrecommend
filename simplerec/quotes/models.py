@@ -4,6 +4,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 from django.conf import settings
+from django.core import urlresolvers
 from django.db import models
 
 
@@ -11,6 +12,10 @@ class Quote(models.Model):
     """Some text that someone finds memorable."""
 
     content = models.CharField(max_length=400)
+
+    def get_absolute_url(self):
+        """Get a URL to this quote's detail page."""
+        return urlresolvers.reverse('quotes-detail', kwargs={'pk': self.pk})
 
     def __unicode__(self):
         return self.content

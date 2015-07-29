@@ -16,11 +16,9 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 
-import quotes.urls
-
 
 urlpatterns = [  # pylint: disable=invalid-name
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^$', include(quotes.urls)),
+    url(r'^', include('quotes.urls')),
 ]

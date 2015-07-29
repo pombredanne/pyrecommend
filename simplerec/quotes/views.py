@@ -12,3 +12,8 @@ from . import models
 class QuoteIndex(generic.ListView):
     """Show all quotes in the system."""
     queryset = models.Quote.objects.all()
+
+
+class QuoteDetail(generic.DetailView):
+    """Show a single quote."""
+    queryset = models.Quote.objects.all()
