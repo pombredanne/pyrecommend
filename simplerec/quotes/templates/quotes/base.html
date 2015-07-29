@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+    <head>
+        <title>Quotes</title>
+        <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    </head>
+
+    <body class="container">
+        {% block content %}
+            <h2>Content block</h2>
+        {% endblock %}
+    </body>
+</html>

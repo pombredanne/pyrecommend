@@ -1,25 +1,12 @@
-<!DOCTYPE html>
-{% load static %}
-<html lang="en">
+{% extends 'quotes/base.html' %}
+{% block content %}
+    <p>{{ quote }}</p>
 
-    <head>
-        <title>Quotes</title>
-        <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
-    </head>
+    {% if quote.is_favorited %}
+        <p>This is a favorite. <a href="{% url 'quotes-unfavorite' pk=quote.pk %}">Unfavorite</a></p>
+    {% elif request.user.is_authenticated %}
+        <p><a href="{% url 'quotes-mark-favorite' pk=quote.pk %}">Mark as favorite</a></p>
+    {% endif %}
 
-    <body class="container">
-        <h1>Quotes</h1>
-
-        <p>{{ quote }}</p>
-
-        {% if quote.is_favorited %}
-            <p>This is a favorite. <a href="{% url 'quotes-unfavorite' pk=quote.pk %}">Unfavorite</a></p>
-        {% elif request.user.is_authenticated %}
-            <p><a href="{% url 'quotes-mark-favorite' pk=quote.pk %}">Mark as favorite</a></p>
-        {% endif %}
-
-        <p><a href="{% url 'quotes-index' %}">View all quotes</a></p>
-        </script>
-
-    </body>
-</html>
+    <p><a href="{% url 'quotes-index' %}">View all quotes</a></p>
+{% endblock %}
