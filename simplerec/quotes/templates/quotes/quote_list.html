@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+    <head>
+        <title>Quotes</title>
+        <link rel="stylesheet" href="{% static 'bootstrap/dist/css/bootstrap.min.css' %}">
+    </head>
+
+    <body class="container">
+        <h1>Quotes</h1>
+
+        {% if not quote_list %}
+            <p>No quotes found!</p>
+        {% else %}
+            <ul>
+                {% for quote in quote_list %}
+                    <li>{{ quote }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    </body>
+</html>
