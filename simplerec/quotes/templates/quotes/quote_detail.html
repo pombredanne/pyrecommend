@@ -12,7 +12,14 @@
 
         <p>{{ quote }}</p>
 
+        {% if quote.is_favorited %}
+            <p>This is a favorite. <a href="{% url 'quotes-unfavorite' pk=quote.pk %}">Unfavorite</a></p>
+        {% elif request.user.is_authenticated %}
+            <p><a href="{% url 'quotes-mark-favorite' pk=quote.pk %}">Mark as favorite</a></p>
+        {% endif %}
+
         <p><a href="{% url 'quotes-index' %}">View all quotes</a></p>
+        </script>
 
     </body>
 </html>

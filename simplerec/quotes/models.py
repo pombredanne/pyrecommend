@@ -17,6 +17,22 @@ class Quote(models.Model):
         """Get a URL to this quote's detail page."""
         return urlresolvers.reverse('quotes-detail', kwargs={'pk': self.pk})
 
+    def mark_viewed_by(self, user):
+        """Record that the given Django user viewed this quote."""
+        ViewedQuote.objects.get_or_create(user=user, quote=self)
+
+    def is_favorited_by(self, user):
+        """Check if user has favorited this quote."""
+        return FavoriteQuote.objects.filter(user=user, quote=self).exists()
+
+    def mark_favorite_for(self, user):
+        """Mark this as a favorite quote for user."""
+        FavoriteQuote.objects.get_or_create(user=user, quote=self)
+
+    def unmark_favorite_for(self, user):
+        """Remove favorite mark for the given user."""
+        FavoriteQuote.objects.filter(user=user, quote=self).delete()
+
     def __unicode__(self):
         return self.content
 
@@ -29,7 +45,8 @@ class FavoriteQuote(models.Model):
     quote = models.ForeignKey(Quote)
 
     def __unicode__(self):
-        return '♥ {}: {}'.format(self.user, self.quote)
+        star_symbol = '\u2605'
+        return '{} {}: {}'.format(star_symbol, self.user, self.quote)
 
     class Meta:
         unique_together = ('user', 'quote')
@@ -43,7 +60,8 @@ class ViewedQuote(models.Model):
     quote = models.ForeignKey(Quote)
 
     def __unicode__(self):
-        return '✓ {}: {}"'.format(self.user, self.quote)
+        checkmark = '\u2713'
+        return '{} {}: {}'.format(checkmark, self.user, self.quote)
 
     class Meta:
         unique_together = ('user', 'quote')
