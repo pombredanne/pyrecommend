@@ -8,6 +8,12 @@
     </head>
 
     <body class="container">
+        {% if request.user.is_authenticated %}
+            <p><small>Logged in as {{ user }}. <a href="{% url 'logout' %}?next={{ request.path }}">Logout</a></small></p>
+        {% else %}
+            <p><small><a href="{% url 'login' %}?next={{ request.path }}">Login</a></small></p>
+        {% endif %}
+
         {% block content %}
             <h2>Content block</h2>
         {% endblock %}

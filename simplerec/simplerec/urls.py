@@ -21,4 +21,5 @@ urlpatterns = [  # pylint: disable=invalid-name
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^', include('quotes.urls')),
+    url(r'^', include('django.contrib.auth.urls')),
 ]
