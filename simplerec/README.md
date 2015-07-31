@@ -7,4 +7,5 @@ To get going, run:
     python manage.py createsuperuser
     python manage.py runserver
 
-(Requirements not currently listed anywhere)
+(Requirements are django and django-bower. Also bower must be installed
+locally.)

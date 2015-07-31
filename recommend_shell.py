@@ -8,7 +8,7 @@ Use::
 # pylint: disable=invalid-name
 from pprint import pprint  # pylint: disable=unused-import
 
-import rec
+from pyrecommend import rec
 
 
 def pad_zero(dicts):
@@ -50,7 +50,14 @@ for user, apply_ids in users_applies.items():
     users[user].update({k: APPLY_FACTOR for k in apply_ids})
 
 
-sim_ads = rec.similarity_data(users, rec.similarity_cosine)
+inverted_data = {}
+for user, ratings in users.items():
+    for ad_id, score in ratings.items():
+        inverted_data.setdefault(ad_id, {})[user] = score
+
+
+# sim_ads = rec.similarity_data(rec.DictData(users), rec.similarity_cosine)
+sim_ads = {}
 
 
 def suggest(user_id):

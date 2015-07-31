@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'djangobower',
+    'django_extensions',
 
     'quotes',
 )
