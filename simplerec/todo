@@ -4,5 +4,4 @@
       rec.similarity_data(get_ratings.QuoteData(Quote.objects.get(pk=1)),
                           get_ratings.ResultStorage())
 
-- Show recommendations on frontend
 - Probably need a bulk_store() method on QuoteSimilarity.

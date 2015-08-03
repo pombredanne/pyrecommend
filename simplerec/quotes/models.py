@@ -7,6 +7,7 @@ from django.core import exceptions
 from django.conf import settings
 from django.core import urlresolvers
 from django.db import models
+from django.db.models import Q
 
 
 class Quote(models.Model):
@@ -33,6 +34,22 @@ class Quote(models.Model):
     def unmark_favorite_for(self, user):
         """Remove favorite mark for the given user."""
         FavoriteQuote.objects.filter(user=user, quote=self).delete()
+
+    @property
+    def similar_quotes(self, limit=5):
+        """A QuerySet of the most similar quotes."""
+        sim_quotes = QuoteSimilarity.objects.filter(
+            Q(quote_1=self) | Q(quote_2=self)).distinct()
+        sim_quotes = sim_quotes.order_by('-score')
+        if limit:
+            sim_quotes = sim_quotes[:limit]
+
+        def other_quote(sim):
+            """Get the non-self Quote from a QuoteSimilarity."""
+            is_q1 = sim.quote_1 == self
+            return sim.quote_2 if is_q1 else sim.quote_1
+
+        return [other_quote(s) for s in sim_quotes]
 
     def __unicode__(self):
         return self.content
