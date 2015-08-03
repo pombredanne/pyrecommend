@@ -3,6 +3,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+from django.core import exceptions
 from django.conf import settings
 from django.core import urlresolvers
 from django.db import models
@@ -65,3 +66,40 @@ class ViewedQuote(models.Model):
 
     class Meta:
         unique_together = ('user', 'quote')
+
+
+NO_RELATED_NAME = '+'  # Try to clarify obscure Django syntax.
+
+
+class QuoteSimilarity(models.Model):
+    """Record similarity between a pair of quotes.
+
+    To prevent duplicate data, e.g. storing (a, b, 0.5) as well as
+    (b, a, 0.5), quote_1 should always contain the quote with the smaller PK.
+    This has no real meaning but ensures there is only one unique way any pair
+    of quotes can be stored in this model.
+
+    """
+
+    quote_1 = models.ForeignKey(Quote, related_name=NO_RELATED_NAME)
+
+    quote_2 = models.ForeignKey(Quote, related_name=NO_RELATED_NAME)
+
+    score = models.FloatField()
+
+    def clean(self):
+        """Ensure quote_1's pk is smaller than quote_2's."""
+        if self.quote_1.pk > self.quote_2.pk:
+            raise exceptions.ValidationError(
+                'quote_1 must have the smaller pk.')
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super(QuoteSimilarity, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return 'QuoteSimilarity(quote_1={}, quote_2={}, score={})'.format(
+            self.quote_1.pk, self.quote_2.pk, self.score)
+
+    class Meta:
+        unique_together = ('quote_1', 'quote_2')
