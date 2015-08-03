@@ -4,7 +4,14 @@ import math
 
 
 class DictData(object):
-    # pylint: disable=missing-docstring
+    """A data access object for the recommendation algorithms.
+
+    This reference implementation uses a Python dictionary as the underlying
+    datastore. All suggestion methods are written with this object in mind, so
+    by re-implenting the interface you can use the algorithms with e.g. the
+    Django ORM or any other persistence/data source.
+
+    """
 
     def __init__(self, data, default=None):
         self.data = data
@@ -12,16 +19,32 @@ class DictData(object):
 
     @property
     def items(self):
+        """All items eligible for reommendation in the system.
+
+        Should not return any duplicate items.
+
+        """
         return self.data.keys()
 
     @property
     def item_set(self):
+        """Probably due to be deleted. No reason for this and `items`."""
         return set(self.items)
 
     def __getitem__(self, k):
         if self.default is not None:
             return self.data.get(k, self.default)
         else:
+
+            # Data is organized in two layers:
+            #   - a map of items to user's ratings
+            #   - user ratings, themselves a map of users to numeric scores
+            # When no default is present, assume it's because we're working on
+            # the outer, item level. So if data[k] exists it will be a map of
+            # user ratings, and for user ratings, we want a non-existent key
+            # to have a score of 0.
+            #
+            # This is hacky and should probably be refactored.
             return DictData(self.data[k], default=0)
 
     def __repr__(self):
@@ -31,6 +54,7 @@ class DictData(object):
         return iter(self.data)
 
     def values(self):
+        """Get all... values? I don't even know why this is here..."""
         return self.data.values()
 
 
