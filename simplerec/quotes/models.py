@@ -101,5 +101,19 @@ class QuoteSimilarity(models.Model):
         return 'QuoteSimilarity(quote_1={}, quote_2={}, score={})'.format(
             self.quote_1.pk, self.quote_2.pk, self.score)
 
+    @classmethod
+    def store(cls, quote_a, quote_b, score):
+        """Utility to create new QuoteSimilarity objects.
+
+        Figures out the valid unique order for quote_a and quote_b.
+
+        """
+        if quote_a.pk < quote_b.pk:
+            quote_1, quote_2 = quote_a, quote_b
+        else:
+            quote_1, quote_2 = quote_b, quote_a
+        return cls.objects.update_or_create(
+            quote_1=quote_1, quote_2=quote_2, defaults={'score': score})
+
     class Meta:
         unique_together = ('quote_1', 'quote_2')
