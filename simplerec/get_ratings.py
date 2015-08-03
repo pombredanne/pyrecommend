@@ -66,14 +66,12 @@ class QuoteData(object):  # pylint: disable=too-few-public-methods
 
 
 class ResultStorage(object):  # pylint: disable=too-few-public-methods
-    """Collect a dict as results are populated."""
+    """Write scores into the database."""
 
-    def __init__(self):
-        self.data = {}
-
-    def __setitem__(self, key, val):
-        # key is a quote, val is a similarity set
-        self.data[key.pk] = [(score, quote.pk) for score, quote in val.items()]
+    @classmethod
+    def __setitem__(cls, quote, similarity_scores):
+        for score, other_quote in similarity_scores:
+            quotes.models.QuoteSimilarity.store(quote, other_quote, score)
 
 
 def turn_to_pks(sim_data):
