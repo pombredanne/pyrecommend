@@ -82,3 +82,8 @@ def turn_to_pks(sim_data):
     """
     return {key.pk: [(score, quote.pk) for score, quote in val]
             for key, val in sim_data.items()}
+
+
+def update_suggestions(quote):
+    """Update suggestion info for quote and all related quotes."""
+    rec.similarity_data(QuoteData(quote), ResultStorage())

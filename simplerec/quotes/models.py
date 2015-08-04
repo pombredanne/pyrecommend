@@ -3,11 +3,21 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from django.core import exceptions
+import logging
+import multiprocessing
+import time
+
 from django.conf import settings
+from django.core import exceptions
 from django.core import urlresolvers
 from django.db import models
 from django.db.models import Q
+from django.db.models import signals
+
+import get_ratings
+
+
+LOG = logging.getLogger(__name__)
 
 
 class Quote(models.Model):
@@ -83,6 +93,33 @@ class ViewedQuote(models.Model):
 
     class Meta:
         unique_together = ('user', 'quote')
+
+
+def update_suggestions_handler(*_, **kwargs):
+    """A signal handler to update a quote's suggestion data."""
+    instance = kwargs['instance']
+
+    def do_it(quote_id):
+        """Update 'similar quotes' data."""
+        time.sleep(1)  # Give DB a second to update
+        quote = Quote.objects.get(pk=quote_id)
+        logger = logging.getLogger(__name__)
+        try:
+            quote = Quote.objects.get(pk=quote_id)
+        except Quote.DoesNotExist:
+            print("Couldn't find quote with ID", quote_id)
+            return
+        logger.info('Updating suggestions for quote %s', quote_id)
+        get_ratings.update_suggestions(quote)
+
+    LOG.info('Kicking off suggestions calc in 1s.')
+    proc = multiprocessing.Process(target=do_it, args=(instance.quote.pk,))
+    proc.start()
+
+
+signals.post_save.connect(update_suggestions_handler, sender=FavoriteQuote)
+signals.post_save.connect(update_suggestions_handler, sender=ViewedQuote)
+signals.post_delete.connect(update_suggestions_handler, sender=FavoriteQuote)
 
 
 NO_RELATED_NAME = '+'  # Try to clarify obscure Django syntax.
