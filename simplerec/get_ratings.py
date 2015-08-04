@@ -86,4 +86,5 @@ def turn_to_pks(sim_data):
 
 def update_suggestions(quote):
     """Update suggestion info for quote and all related quotes."""
-    rec.similarity_data(QuoteData(quote), ResultStorage())
+    rec.similarity_data(QuoteData(quote), ResultStorage(),
+                        similarity=rec.dot_product)

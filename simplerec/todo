@@ -1,1 +1,6 @@
-- Probably need a bulk_store() method on QuoteSimilarity.
+- Need a bulk_store() method on QuoteSimilarity.
+- Similarity computations may be repeated. Need strategy to only compare each
+  pair once (currently I'm 90% sure (a,b) and (b,a) both get calculated).
+- May want to also store the number of data points that factored into an
+  equation. E.g. cosine similarity of .7 with 2 data points may not be as
+  strong as cosine similarity with 30 data points. ...maybe.
