@@ -93,9 +93,9 @@ def similarity_cosine(data_a, data_b):
 
     all_keys = data_a.item_set | data_b.item_set
 
-    if data_a and data_b:
-        return (dot_product(data_a, data_b, all_keys)
-                / (mag(data_a.values()) * mag(data_b.values())))
+    denom = mag(data_a.values()) * mag(data_b.values())
+    if denom:
+        return dot_product(data_a, data_b, all_keys) / denom
     else:
         return 0
 
