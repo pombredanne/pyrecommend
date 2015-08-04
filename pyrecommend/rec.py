@@ -174,7 +174,7 @@ def sim(*data, **kwargs):
 
     >>> (sim([1, 2, 3], [4, 5, 6],
     ...      similarity=lambda a, b: len(a.values()) * len(b.values()))
-    ...  == {1: [(9, 2)], 2: [(9, 1)]})
+    ...  == {(1, 2): 9})
     True
 
     """
@@ -182,7 +182,9 @@ def sim(*data, **kwargs):
     if kwargs:
         raise ValueError('Unrecognized arguments: {}'.format(
             ', '.join(kwargs.keys())))
-    return similarity_data(DictData(make_data(data)), similarity=similarity)
+    ratings = make_data(data)
+    sim_data = similarity_data(DictData(ratings), similarity=similarity)
+    return make_pairs(sim_data)
 
 
 def make_pairs(sim_data):
