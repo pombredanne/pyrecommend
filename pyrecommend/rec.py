@@ -174,6 +174,8 @@ def sim(*data, **kwargs):
 
     All data is sent to `make_data`.
 
+    Useful for playing with samples in the shell.
+
     >>> (sim([1, 2, 3], [4, 5, 6],
     ...      similarity=lambda a, b: len(a.values()) * len(b.values()))
     ...  == {(1, 2): 9})
