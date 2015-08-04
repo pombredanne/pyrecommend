@@ -4,7 +4,7 @@ from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
 import logging
-import multiprocessing
+import threading
 import time
 
 from django.conf import settings
@@ -113,7 +113,7 @@ def update_suggestions_handler(*_, **kwargs):
         get_ratings.update_suggestions(quote)
 
     LOG.info('Kicking off suggestions calc in 1s.')
-    proc = multiprocessing.Process(target=do_it, args=(instance.quote.pk,))
+    proc = threading.Thread(target=do_it, args=(instance.quote.pk,))
     proc.start()
 
 
