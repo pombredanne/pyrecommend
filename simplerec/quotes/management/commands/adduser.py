@@ -14,8 +14,9 @@ class Command(base.BaseCommand):
 
     def add_arguments(self, parser):
         parser.add_argument('username', help="The new user's username.")
-        parser.add_argument('-p', '--password', help="The new user's password.",
-                            default='!', nargs='?')
+        parser.add_argument('-p', '--password',
+                            help="The new user's password.", default='!',
+                            nargs='?')
 
     def handle(self, *_, **options):
         name = options['username']

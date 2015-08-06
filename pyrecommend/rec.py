@@ -142,8 +142,14 @@ def similar_sets(dataset, target, similarity=similarity_cosine):
     return sorted(scores, reverse=True)
 
 
-def similarity_data(dataset, result_storage=None, similarity=similarity_cosine):
-    """Get a map of items to similar items using a ranking dataset."""
+def similarity_data(dataset, result_storage=None,
+                    similarity=similarity_cosine):
+    """Get a map of items to similar items using a ranking dataset.
+
+    result_storage:
+        an object implementing __getitem__ where all results are stored.
+
+    """
     result = result_storage if result_storage is not None else {}
     for item in dataset:
         similar_items = similar_sets(dataset, item, similarity=similarity)

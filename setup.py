@@ -2,12 +2,14 @@
 import os
 from setuptools import setup
 
+
 def read(fname):
     """Get the contents of the named file as a string."""
     try:
         return open(os.path.join(os.path.dirname(__file__), fname)).read()
     except IOError:
         return u''
+
 
 setup(
     name='pyrecommend',

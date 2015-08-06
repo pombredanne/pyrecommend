@@ -1,4 +1,8 @@
+# coding: utf-8
 """Tests for the pyrecommend module."""
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
+
 from pyrecommend import rec
 
 
@@ -26,3 +30,13 @@ def test_dot_product():
     product = rec.dot_product(data_a, data_b)
 
     assert 35 == product
+
+
+def test_sorensen():
+    """Sorensen coefficients are correct."""
+    data_a = make_data(4, 0, 1, 3)
+    data_b = make_data(3, 1, 0, 5)
+
+    sim_score = rec.similarity_sorensen(data_a, data_b)
+
+    assert round(sim_score, 3) == 0.885
