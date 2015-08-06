@@ -3,5 +3,6 @@ collabroative filtering and automated recommendations. This may perhaps one day
 become a library for general use but right now it is not fit for... well
 anything, really.
 
-pyrecommend/ contains the actual recommendation package.
-simplerec/ is a Django project used as a testbed.
+`pyrecommend/` contains the actual recommendation package.
+
+`simplerec/` is a Django project used for testing.
