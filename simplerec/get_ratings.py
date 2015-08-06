@@ -1,6 +1,6 @@
-"""Interface between suggestion algorithm and Django quote app."""
+"""Interface between pyrecommend and Django quote app."""
 import django.contrib.auth.models  # pylint: disable=unused-import
-from django.contrib import auth
+from django.contrib import auth  # NOTE: auth.models is used, needs above
 from django.db.models import Q
 from pyrecommend import rec
 
