@@ -1,6 +1,21 @@
 # coding: utf-8
-"""Recommendation stuff."""
-from __future__ import division, unicode_literals
+"""A library for item-to-item collaborative filtering.
+
+The primary function of interest is `similarity_data`, which will calculate
+similarity scores for pairs of items from a given dataset.
+
+There are also a few similarity calculations to choose from, including
+
+- cosine
+- pearson
+- sorensen/dice
+- dot product
+
+This library is in an extremely early state.
+
+"""
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 import math
 
 
@@ -136,7 +151,9 @@ def similarity_data(dataset, result_storage=None, similarity=similarity_cosine):
     return result
 
 
-def recommend(similar_data, target):
+# TODO: this is untested; in my use case a function like this doesn't appear to
+# be needed. Might change in the future, however.
+def __recommend(similar_data, target):  # pragma: no cover
     """Recommend things to `target` using prebuilt similarity data.
 
     Target should be a user profile (e.g. a scores map), not a user's name.
@@ -159,43 +176,51 @@ def recommend(similar_data, target):
 def make_data(score_list):
     """Make numbered data dictionaries from a list of lists.
 
+    This is for easily simulating scores for items by ID, rated by users where
+    the users are identified by ID as well.
+
+    This is to help when playing in the shell.
+
     >>> make_data([[5, 20], [30, 9]]) == {1: {1: 5, 2: 20}, 2: {1: 30, 2: 9}}
     True
 
     """
-    data = {}
-    for i, scores in enumerate(score_list):
-        data[i+1] = {j+1: v for j, v in enumerate(scores) if v != 0}
+    data = {i+1: {j+1: v for j, v in enumerate(scores) if v != 0}
+            for i, scores in enumerate(score_list)}
     return data
 
 
 def sim(*data, **kwargs):
-    """Shorthand for calculating similarity data.
+    """Shorthand for quickly calculating similarity for small datasets.
 
-    All data is sent to `make_data`.
+    data: one or more lists of ratings. Each list represents an 'item' and each
+          number in that list is a rating by a user; users are assumed to be
+          the same between all lists.
 
-    Useful for playing with samples in the shell.
+    similarity: a keyword-only argument; the similarity function to use.
 
-    >>> (sim([1, 2, 3], [4, 5, 6],
-    ...      similarity=lambda a, b: len(a.values()) * len(b.values()))
-    ...  == {(1, 2): 9})
-    True
+    Useful for playing in the shell.
+
+    >>> sim([1, 0, 5], [1, 1, 1], similarity=dot_product)
+    {(1, 2): 6}
 
     """
-    similarity = kwargs.pop('similarity', similarity_sorensen)
+
+    # Python 2 doesn't support keyword-only arguments.
+    similarity = kwargs.pop('similarity')
     if kwargs:
-        raise ValueError('Unrecognized arguments: {}'.format(
-            ', '.join(kwargs.keys())))
+        raise ValueError('Unused kwargs: {}'.format(kwargs.keys()))
+
     ratings = make_data(data)
     sim_data = similarity_data(DictData(ratings), similarity=similarity)
     return make_pairs(sim_data)
 
 
 def make_pairs(sim_data):
-    """Take a dictionary of similarity data and make pairs of it instead.
+    """Convert a dict of item-indexed data to pair-indexed.
 
-    >>> (make_pairs({1: [(9, 2)], 2: [(9, 1)], 3: [(12, 5)]})
-    ...  == {(1, 2): 9, (3, 5): 12})
+    >>> data = {1: [(0.333, 2)], 2: [(0.333, 1)], 3: [(0.84, 5)]}
+    >>> make_pairs(data) == {(1, 2): 0.333, (3, 5): 0.84}
     True
 
     """
