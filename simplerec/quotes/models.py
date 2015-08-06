@@ -198,3 +198,4 @@ class QuoteSimilarity(models.Model):
 
     class Meta:
         unique_together = ('quote_1', 'quote_2')
+        verbose_name_plural = 'Quote similarities'
