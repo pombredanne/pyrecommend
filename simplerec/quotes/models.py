@@ -193,8 +193,13 @@ class QuoteSimilarity(models.Model):
             quote_1, quote_2 = quote_a, quote_b
         else:
             quote_1, quote_2 = quote_b, quote_a
-        return cls.objects.update_or_create(
-            quote_1=quote_1, quote_2=quote_2, defaults={'score': score})
+
+        if score:
+            return cls.objects.update_or_create(
+                quote_1=quote_1, quote_2=quote_2, defaults={'score': score})
+        else:
+            cls.objects.filter(quote_1=quote_1, quote_2=quote_2).delete()
+            return False, None
 
     class Meta:
         unique_together = ('quote_1', 'quote_2')
