@@ -22,13 +22,24 @@ def ratings_for(obj):
         # If we're getting ratings fora quote, we're looking at all the
         # different users that rated it.
         def key(quote_obj):
-            """Associate each score with a user."""
-            return quote_obj.user
+            """Associate each score with a user or session key."""
+            try:
+                return quote_obj.user
+            except AttributeError:
+                return quote_obj.session_key
 
     for vquote in obj.viewedquote_set.all():
         ratings[key(vquote)] = 1
     for fquote in obj.favoritequote_set.all():
         ratings[key(fquote)] = 5
+
+    try:
+        anon_quotes = obj.anonymousviewedquote_set.all()
+    except AttributeError:
+        anon_quotes = []  # iterating over nothing is cheap
+    for aquote in anon_quotes:
+        ratings[key(aquote)] = 1
+
     return ratings
 
 
@@ -48,14 +59,21 @@ class QuoteData(object):  # pylint: disable=too-few-public-methods
             Q(favoritequote__quote=quote) | Q(viewedquote__quote=quote)
         ).distinct()
 
+        # Get all sessions that have viewed this quote
+        relevant_sessions = (quotes.models.AnonymousViewedQuote.objects
+                             .filter(quote=quote)
+                             .values_list('session_key', flat=True).distinct())
+
         # Get all quotes that said users have viewed or favorited (will
         # include 'quote')
         relevant_quotes = quotes.models.Quote.objects.filter(
             Q(favoritequote__user__in=relevant_users) |
-            Q(viewedquote__user__in=relevant_users)
+            Q(viewedquote__user__in=relevant_users) |
+            Q(anonymousviewedquote__session_key__in=relevant_sessions)
         ).distinct()
+
         return relevant_quotes.prefetch_related(
-            'viewedquote_set', 'favoritequote_set')
+            'viewedquote_set', 'favoritequote_set', 'anonymousviewedquote_set')
 
     def __getitem__(self, quote):
         """Get all user ratings for this quote."""

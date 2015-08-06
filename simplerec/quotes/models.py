@@ -33,6 +33,11 @@ class Quote(models.Model):
         """Record that the given Django user viewed this quote."""
         ViewedQuote.objects.get_or_create(user=user, quote=self)
 
+    def mark_viewed_by_anonymous(self, session_key):
+        """Record a non-authenticated user viewed this quote."""
+        AnonymousViewedQuote.objects.get_or_create(
+            session_key=session_key, quote=self)
+
     def is_favorited_by(self, user):
         """Check if user has favorited this quote."""
         return FavoriteQuote.objects.filter(user=user, quote=self).exists()
@@ -95,13 +100,32 @@ class ViewedQuote(models.Model):
         unique_together = ('user', 'quote')
 
 
+class AnonymousViewedQuote(models.Model):
+    """Track when an anonymous user views a quote."""
+    session_key = models.CharField(max_length=255)
+
+    quote = models.ForeignKey(Quote)
+
+    def __unicode__(self):
+        checkmark = '\u2713'
+        return '{} {}: {}'.format(checkmark, self.session_key, self.quote)
+
+    class Meta:
+        unique_together = ('session_key', 'quote')
+
+
 def update_suggestions_handler(*_, **kwargs):
     """A signal handler to update a quote's suggestion data."""
     instance = kwargs['instance']
 
+    # Uses a separated thread with a delay because some data seems to be in an
+    # inconsistent state when run in the handler (e.g. non-nullable fields are
+    # NULL). This may just be a SQLite quirk of some kind, however.
+    delay = 1
+
     def do_it(quote_id):
         """Update 'similar quotes' data."""
-        time.sleep(1)  # Give DB a second to update
+        time.sleep(delay)  # Give DB time to update
         quote = Quote.objects.get(pk=quote_id)
         logger = logging.getLogger(__name__)
         try:
@@ -112,13 +136,16 @@ def update_suggestions_handler(*_, **kwargs):
         logger.info('Updating suggestions for quote %s', quote_id)
         get_ratings.update_suggestions(quote)
 
-    LOG.info('Kicking off suggestions calc in 1s.')
+    LOG.info('Kicking off suggestions calc in %ss.', delay)
     proc = threading.Thread(target=do_it, args=(instance.quote.pk,))
     proc.start()
 
 
-signals.post_save.connect(update_suggestions_handler, sender=FavoriteQuote)
+# Trigger suggestion calculations when tracking info updates.
+signals.post_save.connect(update_suggestions_handler,
+                          sender=AnonymousViewedQuote)
 signals.post_save.connect(update_suggestions_handler, sender=ViewedQuote)
+signals.post_save.connect(update_suggestions_handler, sender=FavoriteQuote)
 signals.post_delete.connect(update_suggestions_handler, sender=FavoriteQuote)
 
 

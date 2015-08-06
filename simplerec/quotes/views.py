@@ -34,6 +34,9 @@ class QuoteDetail(generic.DetailView):
         quote = self.get_object()
         if self.request.user.is_authenticated():
             quote.mark_viewed_by(self.request.user)
+        else:
+            sess_key = self.request.session._get_or_create_session_key()
+            quote.mark_viewed_by_anonymous(sess_key)
         return resp
 
 
