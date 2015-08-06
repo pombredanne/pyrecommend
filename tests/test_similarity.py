@@ -3,7 +3,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from pyrecommend import rec
+from pyrecommend import rec, similarity
 
 
 def make_data(*values):
@@ -17,9 +17,9 @@ def test_cosine_similarity():
     data_a = make_data(2, 1, 0, 2, 0, 1, 1, 1)
     data_b = make_data(2, 1, 1, 1, 1, 0, 1, 1)
 
-    similarity = rec.similarity_cosine(data_a, data_b)
+    sim_score = similarity.cosine(data_a, data_b)
 
-    assert round(similarity, 3) == 0.822
+    assert round(sim_score, 3) == 0.822
 
 
 def test_dot_product():
@@ -27,9 +27,9 @@ def test_dot_product():
     data_a = make_data(5, 0, 3, 2)
     data_b = make_data(1, 3, 4, 9)
 
-    product = rec.dot_product(data_a, data_b)
+    sim_score = similarity.dot_product(data_a, data_b)
 
-    assert 35 == product
+    assert sim_score == 35
 
 
 def test_sorensen():
@@ -37,6 +37,6 @@ def test_sorensen():
     data_a = make_data(4, 0, 1, 3)
     data_b = make_data(3, 1, 0, 5)
 
-    sim_score = rec.similarity_sorensen(data_a, data_b)
+    sim_score = similarity.sorensen(data_a, data_b)
 
     assert round(sim_score, 3) == 0.885
