@@ -1,4 +1,0 @@
-django
-django-bower
-django-extensions
--e ..
