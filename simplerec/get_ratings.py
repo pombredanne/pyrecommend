@@ -2,7 +2,7 @@
 import django.contrib.auth.models  # pylint: disable=unused-import
 from django.contrib import auth  # NOTE: auth.models is used, needs above
 from django.db.models import Q
-from pyrecommend import rec
+from pyrecommend import similarity, rec
 
 import quotes.models
 
@@ -104,5 +104,5 @@ def turn_to_pks(sim_data):
 
 def update_suggestions(quote):
     """Update suggestion info for quote and all related quotes."""
-    rec.similarity_data(QuoteData(quote), ResultStorage(),
-                        similarity=rec.dot_product)
+    rec.similarity_data(QuoteData(quote), similarity.dot_product,
+                        ResultStorage())

@@ -18,7 +18,7 @@ class Command(base.BaseCommand):
 
     def handle(self, *args, **options):  # pylint: disable=unused-argument
         classes = [models.ViewedQuote, models.FavoriteQuote,
-                   models.QuoteSimilarity]
+                   models.AnonymousViewedQuote, models.QuoteSimilarity]
 
         if not options['dry_run']:
             self.stdout.write('Deleting:')
