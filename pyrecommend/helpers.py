@@ -3,8 +3,6 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from . import rec
-
 
 def make_data(score_list):
     """Make numbered data dictionaries from a list of lists.
