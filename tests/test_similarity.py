@@ -3,7 +3,7 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-from pyrecommend import rec, similarity
+from pyrecommend import similarity
 
 
 def test_cosine_similarity():

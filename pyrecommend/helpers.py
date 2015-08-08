@@ -46,8 +46,8 @@ def sim(*data, **kwargs):
         raise ValueError('Unused kwargs: {}'.format(kwargs.keys()))
 
     ratings = make_data(data)
-    sim_data = rec.similarity_data(rec.DictData(ratings),
-                                   similarity=similarity)
+    sim_data = rec.calculate_similarity(
+        rec.DictData(ratings), similarity=similarity)
     return make_pairs(sim_data)
 
 
