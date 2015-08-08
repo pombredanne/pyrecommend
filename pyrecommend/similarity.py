@@ -5,8 +5,8 @@ from __future__ import (absolute_import, division, print_function,
 
 try:
     from itertools import izip
-except ImportError:  # Removed in Python 3
-    izip = zip  # In Python 3, zip does the same job
+except ImportError:  # pragma: no cover
+    izip = zip  # In Python 3, izip is removed because zip does the same job.
 
 from . import vec_util
 
