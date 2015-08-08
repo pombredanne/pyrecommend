@@ -19,6 +19,5 @@ setup(
     description='A simple collaborative filtering algorithm for Python.',
     license='BSD',
     packages=['pyrecommend'],
-    tests_require=['tests'],
     long_description=read('README.md'),
 )
