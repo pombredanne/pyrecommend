@@ -3,6 +3,4 @@ collabroative filtering and automated recommendations. This may perhaps one day
 become a library for general use but right now it is not fit for... well
 anything, really.
 
-`pyrecommend/` contains the actual recommendation package.
-
-`simplerec/` is a Django project used for testing.
+To run the test suite, `pip install tox` then run the command `tox`.
