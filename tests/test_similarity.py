@@ -39,3 +39,8 @@ def test_sorensen():
     sim_score = similarity.sorensen(data_a, data_b)
 
     assert round(sim_score, 3) == 0.885
+
+
+def test_sorensen_empty():
+    """Sorensen coefficient of two empty lists is 0."""
+    assert similarity.sorensen([], []) == 0
