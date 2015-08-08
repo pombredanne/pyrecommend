@@ -16,6 +16,11 @@ def test_cosine_similarity():
     assert round(sim_score, 3) == 0.822
 
 
+def test_cosine_empty():
+    """Cosine between two empty lists is zero."""
+    assert similarity.cosine([], []) == 0
+
+
 def test_dot_product():
     """Dot product calculations are correct."""
     data_a = [5, 0, 3, 2]
