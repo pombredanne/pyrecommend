@@ -3,14 +3,17 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
-import itertools
+try:
+    from itertools import izip
+except ImportError:  # Removed in Python 3
+    izip = zip  # In Python 3, zip does the same job
 
 from . import vec_util
 
 
 def dot_product(data_a, data_b):
     """Get the dot product between two lists."""
-    all_pairs = itertools.izip(data_a, data_b)
+    all_pairs = izip(data_a, data_b)
     return sum(a * b for a, b in all_pairs)
 
 
