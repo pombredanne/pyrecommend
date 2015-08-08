@@ -61,8 +61,8 @@ def calculate_similarity(dataset, similarity, result_storage=None,
     return result
 
 
-# TODO: this is untested; in my use case a function like this doesn't appear to
-# be needed. Might change in the future, however.
+# TODO: functions below are untested; I do not need these functions myself yet
+# so they sit here as untested prototypes
 def __similar_sets(dataset, target, similarity):  # pragma: no cover
     """Find other entries most similar to target.
 
@@ -76,6 +76,7 @@ def __similar_sets(dataset, target, similarity):  # pragma: no cover
     scores = ((similarity(target_data, dataset[k]), k)
               for k in dataset if k != target)
     return sorted(scores, reverse=True)
+
 
 def __recommend(similar_data, target):  # pragma: no cover
     """Recommend things to `target` using prebuilt similarity data.
