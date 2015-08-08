@@ -46,25 +46,5 @@ def sim(*data, **kwargs):
         raise ValueError('Unused kwargs: {}'.format(kwargs.keys()))
 
     ratings = make_data(data)
-    sim_data = rec.calculate_similarity(
-        rec.DictData(ratings), similarity=similarity)
-    return make_pairs(sim_data)
-
-
-def make_pairs(sim_data):
-    """Convert a dict of item-indexed data to pair-indexed.
-
-    >>> data = {1: [(0.333, 2)], 2: [(0.333, 1)], 3: [(0.84, 5)]}
-    >>> make_pairs(data) == {(1, 2): 0.333, (3, 5): 0.84}
-    True
-
-    """
-    result = {}
-    for item_a, sim_items in sim_data.items():
-        for sim_score, item_b in sim_items:
-            if item_a < item_b:
-                pair = item_a, item_b
-            else:
-                pair = item_b, item_a
-            result[pair] = sim_score
-    return result
+    sim_data = rec.calculate_similarity(ratings, similarity)
+    return sim_data
