@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pyrecommend',
-    version='0.1',
+    version='0.01',
     author='Dan Passaro',
     author_email='danpassaro@gmail.com',
     description='A simple collaborative filtering algorithm for Python.',
