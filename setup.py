@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name='pyrecommend',
-    version='0.1.dev4',
+    version='0.1.dev5',
     author='Dan Passaro',
     author_email='danpassaro@gmail.com',
     url='https://github.com/dan-passaro/pyrecommend/',
