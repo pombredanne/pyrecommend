@@ -3,9 +3,9 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import errno
 import glob
 import os.path
-import runpy
 import shutil
 import subprocess
 import sys
@@ -37,10 +37,21 @@ def path_to(*parts):
     return os.path.join(PROJECT_DIR, *parts)
 
 
+def rmdir_if_exists(path):
+    """Remove path if it exists."""
+    try:
+        shutil.rmtree(path)
+    except OSError as exc:
+        if exc.errno == errno.ENOENT:  # File does not exist
+            pass
+        else:
+            raise
+
+
 def clean_build_dirs():
     """Remove old build artifacts."""
-    shutil.rmtree(path_to('build'))
-    shutil.rmtree(path_to('dist'))
+    rmdir_if_exists(path_to('build'))
+    rmdir_if_exists(path_to('dist'))
 
 
 def build_package():
