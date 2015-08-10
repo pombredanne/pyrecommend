@@ -3,6 +3,7 @@ pyrecommend
 
 .. image:: https://travis-ci.org/dan-passaro/pyrecommend.svg?branch=master
    :alt: Build status
+   :target: https://travis-ci.org/dan-passaro/pyrecommend/branches
 
 This project is for now a personal sandbox as I read through some literature on
 collabroative filtering and automated recommendations. This may perhaps one day
