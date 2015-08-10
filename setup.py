@@ -16,6 +16,7 @@ setup(
     version='0.1.dev3',
     author='Dan Passaro',
     author_email='danpassaro@gmail.com',
+    url='https://github.com/dan-passaro/pyrecommend/',
     description='A simple collaborative filtering algorithm for Python.',
     license='BSD',
     packages=['pyrecommend'],
