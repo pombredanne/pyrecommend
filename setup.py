@@ -21,5 +21,6 @@ setup(
     license='MIT',
     package_dir={'': 'src'},
     packages=['pyrecommend'],
-    long_description=read('README.md'),
+    setup_requires=['wheel'],
+    long_description=read('README.rst'),
 )
