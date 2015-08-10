@@ -18,7 +18,7 @@ setup(
     author_email='danpassaro@gmail.com',
     url='https://github.com/dan-passaro/pyrecommend/',
     description='A simple collaborative filtering algorithm for Python.',
-    license='BSD',
+    license='MIT',
     package_dir={'': 'src'},
     packages=['pyrecommend'],
     long_description=read('README.md'),
