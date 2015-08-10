@@ -3,6 +3,8 @@
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
+import doctest
+
 from pyrecommend import helpers
 
 
@@ -13,3 +15,9 @@ def test_make_data():
         1: {1: 3, 2: 5},
         2: {1: 20, 2: 50}
     }
+
+
+def test_doctests():
+    """Ensure doctests work run."""
+    failures, _ = doctest.testmod(helpers)
+    assert failures == 0

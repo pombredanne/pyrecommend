@@ -1,5 +1,5 @@
 """setuptools config for pyrecommend."""
-import os
+import os.path
 from setuptools import setup
 
 
@@ -19,6 +19,7 @@ setup(
     url='https://github.com/dan-passaro/pyrecommend/',
     description='A simple collaborative filtering algorithm for Python.',
     license='BSD',
+    package_dir={'': 'src'},
     packages=['pyrecommend'],
     long_description=read('README.md'),
 )
