@@ -14,6 +14,24 @@ import sys
 PROJECT_DIR = os.path.dirname(os.path.realpath(__file__))
 
 
+def git(*args):
+    """Shorthand for executing git commands in a subprocess.
+
+    E.g.::
+
+        git('checkout', 'stable')
+
+    Would checkout the branch ``stable``.
+
+    """
+    subprocess.check_call(['git', '-C', PROJECT_DIR] + list(args))
+
+
+def push_to_github():
+    """Make sure latest code is on github."""
+    git('push')
+
+
 def path_to(*parts):
     """Get an absolute path to a file/folder in the project."""
     return os.path.join(PROJECT_DIR, *parts)
@@ -43,10 +61,11 @@ def tag_git_commit_with_version():
         sys.executable, path_to('setup.py'), '-V']).strip()
     tag_str = 'v{}'.format(current_version)
     print('Tagging', tag_str, 'in git')
-    subprocess.check_call(['git', '-C', PROJECT_DIR, 'tag', tag_str])
+    git('tag', tag_str)
 
 
 if __name__ == '__main__':
+    push_to_github()
     clean_build_dirs()
     build_package()
     upload_with_twine()
