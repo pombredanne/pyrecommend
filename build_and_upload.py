@@ -73,6 +73,7 @@ def tag_git_commit_with_version():
     tag_str = 'v{}'.format(current_version)
     print('Tagging', tag_str, 'in git')
     git('tag', tag_str)
+    git('push', '--tags')
 
 
 if __name__ == '__main__':
